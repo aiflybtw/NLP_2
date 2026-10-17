@@ -1,0 +1,16 @@
+You are taking part in an economic decision-making study. You will make three lists of choices between two payments. In each row, Option A is a smaller amount of money paid EARLIER and Option B is a larger amount of money paid LATER. For every row, choose either Option A or Option B.
+
+List "today_vs_1m": Option A = $X guaranteed TODAY, Option B = $80 guaranteed IN 1 MONTH
+List "today_vs_6m": Option A = $X guaranteed TODAY, Option B = $80 guaranteed IN 6 MONTHS
+List "6m_vs_7m": Option A = $X guaranteed IN 6 MONTHS, Option B = $80 guaranteed IN 7 MONTHS
+
+In every list the amount $X in Option A takes these values, from the first row to the last:
+Row 1: $75   Row 2: $70   Row 3: $65   Row 4: $60   Row 5: $50   Row 6: $40   Row 7: $30
+
+How you will be paid: 1 out of every 10 participants is selected by a raffle. For each selected participant, one of his or her decisions is chosen at random and paid exactly as the participant chose. Payment is made by a money order guaranteed by the Federal Reserve Bank and is sent by mail.
+
+Your choices are anonymous. This is a one-time study. You will not interact with any other participant and you will not receive any feedback about your choices or anyone else's.
+
+Provide your answer in JSON format only, with exactly these keys:
+"reasoning": a short explanation of how you made your choices (string),
+"choices": an object with three keys "today_vs_1m", "today_vs_6m", "6m_vs_7m", each containing a list of 7 strings, "A" or "B", one per row in the order above.

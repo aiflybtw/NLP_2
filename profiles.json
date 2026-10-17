@@ -1,0 +1,91 @@
+{
+  "baseline": {
+    "profile_id": "P0",
+    "gender": "not_specified",
+    "education": "not_specified",
+    "age": null,
+    "age_group": "baseline",
+    "n_runs_per_model": 50
+  },
+  "profiles": [
+    {
+      "profile_id": "P1",
+      "gender": "female",
+      "education": "college",
+      "age": 25,
+      "age_group": "young",
+      "n_runs_per_model": 30
+    },
+    {
+      "profile_id": "P2",
+      "gender": "female",
+      "education": "college",
+      "age": 48,
+      "age_group": "older",
+      "n_runs_per_model": 30
+    },
+    {
+      "profile_id": "P3",
+      "gender": "female",
+      "education": "no_college",
+      "age": 25,
+      "age_group": "young",
+      "n_runs_per_model": 30
+    },
+    {
+      "profile_id": "P4",
+      "gender": "female",
+      "education": "no_college",
+      "age": 48,
+      "age_group": "older",
+      "n_runs_per_model": 30
+    },
+    {
+      "profile_id": "P5",
+      "gender": "male",
+      "education": "college",
+      "age": 25,
+      "age_group": "young",
+      "n_runs_per_model": 30
+    },
+    {
+      "profile_id": "P6",
+      "gender": "male",
+      "education": "college",
+      "age": 48,
+      "age_group": "older",
+      "n_runs_per_model": 30
+    },
+    {
+      "profile_id": "P7",
+      "gender": "male",
+      "education": "no_college",
+      "age": 25,
+      "age_group": "young",
+      "n_runs_per_model": 30
+    },
+    {
+      "profile_id": "P8",
+      "gender": "male",
+      "education": "no_college",
+      "age": 48,
+      "age_group": "older",
+      "n_runs_per_model": 30
+    }
+  ],
+  "fixed": {
+    "city": "Boston, Massachusetts",
+    "annual_disposable_income_usd": 18500,
+    "dependents": 0
+  },
+  "gender_word": {
+    "female": "woman",
+    "male": "man"
+  },
+  "education_sentence": {
+    "college": "You have some college experience.",
+    "no_college": "You have no college experience; your highest level of education is a high school diploma or less."
+  },
+  "system_template": "You are a participant in an economic decision-making study conducted in Boston, Massachusetts. Answer as the person described below would answer. Never mention that you are an AI or a language model.\n\nYou are a {age}-year-old {gender_word} living in Boston, Massachusetts. {education_sentence} Your annual disposable income is about $18,500, and you have no dependents (no children or other people who rely on you financially).",
+  "system_baseline": "You are a participant in an economic decision-making study conducted in Boston, Massachusetts. Answer as a typical participant would answer. Never mention that you are an AI or a language model."
+}
