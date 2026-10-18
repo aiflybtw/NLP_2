@@ -1,11 +1,3 @@
-"""Полный прогон: P0 x50 + P1–P8 x30 = 290 запросов на модель.
-
-Запуск: nohup python3 run_full.py ALIAS > logs/full_ALIAS.log 2>&1 &
-ALIAS: deepseek | luna | qwen
-
-Поля CSV — как в пилоте (§6.8 + X*/IDF/beta/флаги).
-"""
-
 import csv
 import datetime
 import json
@@ -17,12 +9,11 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent / "prompts"))
-from build_request import build_messages  # noqa: E402
+from build_request import build_messages
 
 BASE = Path(__file__).parent
 
 CONFIGS = {
-    # alias: (model_id, reasoning_param, max_tokens)
     "deepseek": ("deepseek/deepseek-v4.1-flash", {"enabled": False}, 1500),
     "luna": ("openai/gpt-6-luna", None, 1500),
     "qwen": ("qwen/qwen3.8-flash", {"enabled": False}, 3000),
@@ -60,7 +51,7 @@ FIELDS = [
 ]
 
 
-def get_key() -> str:
+def get_key():
     for line in open(BASE / "api_key.yaml", encoding="utf-8"):
         if "API_KEY" in line:
             return line.split(":", 1)[1].strip()
@@ -97,7 +88,6 @@ def call_api_once(messages, model, reasoning, max_tokens):
 
 
 def call_api(messages, model, reasoning, max_tokens):
-    """Транспорт с backoff на 429 (до ~2 мин ожидания суммарно)."""
     for wait in (5, 10, 20, 30, 45, 60):
         try:
             return call_api_once(messages, model, reasoning, max_tokens)
@@ -106,7 +96,7 @@ def call_api(messages, model, reasoning, max_tokens):
     return call_api_once(messages, model, reasoning, max_tokens)
 
 
-def extract_json(text: str):
+def extract_json(text):
     text = re.sub(r"```(?:json)?", "", text).strip()
     m = re.search(r"\{.*\}", text, re.DOTALL)
     if not m:
@@ -136,7 +126,6 @@ def switch_star(seq):
         for i in range(6):
             if seq[i] == "A" and seq[i + 1] == "B":
                 return (X_GRID[i] + X_GRID[i + 1]) / 2, True, "interval_multi"
-        # только B->A переходы: reverse
         for i in range(6):
             if seq[i] == "B" and seq[i + 1] == "A":
                 return (X_GRID[i] + X_GRID[i + 1]) / 2, True, "reverse"

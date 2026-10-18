@@ -1,12 +1,3 @@
-"""Визуализации: люди (из статьи Meier & Sprenger 2010) vs 3 LLM-модели.
-
-Бенчмарки людей (Table 1, N=541):
-  IDF01 = 0.83; present-biased 36%; future-biased 9%; consistent ~55%.
-Градиенты (Table 2): male -0.057 IDF; college +0.042 IDF; age -0.002 IDF/год.
-
-Выход: analysis_disc/figures/*.png
-"""
-
 from pathlib import Path
 
 import matplotlib
@@ -34,7 +25,6 @@ HUMAN = {"exp": 0.55, "hyp": 0.36, "fut": 0.09, "idf": 0.83}
 NORM_IDF = 0.996
 C = {"exp": "#4C72B0", "hyp": "#DD8452", "fut": "#937860", "human": "#C44E52", "norm": "#55A868"}
 
-# ---- Fig 1: доли типов дисконтирования -------------------------------------------------
 exp = [HUMAN["exp"]] + [(v[v.model_name == m].dtype == "exponential").mean() for m in ORDER]
 hyp = [HUMAN["hyp"]] + [(v[v.model_name == m].dtype == "hyperbolic").mean() for m in ORDER]
 fut = [HUMAN["fut"]] + [(v[v.model_name == m].dtype == "future_bias").mean() for m in ORDER]
@@ -59,7 +49,6 @@ fig.tight_layout()
 fig.savefig(FIG / "fig1_shares.png", dpi=160)
 plt.close(fig)
 
-# ---- Fig 2: распределение IDF1 vs человек и норма -------------------------------------
 fig, axes = plt.subplots(1, 2, figsize=(12, 4.6), gridspec_kw={"width_ratios": [2, 1]})
 ax = axes[0]
 bins = np.linspace(0.3, 1.0, 22)
@@ -87,7 +76,6 @@ fig.tight_layout()
 fig.savefig(FIG / "fig2_idf.png", dpi=160)
 plt.close(fig)
 
-# ---- Fig 3: β̂ распределение vs экспонента --------------------------------------------
 fig, ax = plt.subplots(figsize=(8, 4.8))
 data = [v[v.model_name == m]["beta"].dropna().values for m in ORDER]
 parts = ax.violinplot(data, showmeans=True, showextrema=False)
@@ -105,7 +93,6 @@ fig.tight_layout()
 fig.savefig(FIG / "fig3_beta.png", dpi=160)
 plt.close(fig)
 
-# ---- Fig 4: средний IDF1 по профилям (модель × профиль) -------------------------------
 piv = v[v.profile_id != "P0"].pivot_table(index="profile_id", columns="model_name", values="IDF1", aggfunc="mean")
 piv = piv[ORDER]
 fig, ax = plt.subplots(figsize=(9, 4.6))
@@ -127,7 +114,6 @@ fig.tight_layout()
 fig.savefig(FIG / "fig4_profiles.png", dpi=160)
 plt.close(fig)
 
-# ---- Fig 5: градиенты по полу / образованию / возрасту --------------------------------
 fig, axes = plt.subplots(1, 3, figsize=(13, 4.3))
 for ax, (col, name) in zip(axes, [("gender", "Пол"), ("education", "Образование"), ("age_group", "Возраст")]):
     g = v[v.profile_id != "P0"].groupby(["model_name", col])["IDF1"].mean().unstack()
@@ -139,12 +125,10 @@ for ax, (col, name) in zip(axes, [("gender", "Пол"), ("education", "Обра�
     ax.set_ylim(0.6, 1.0)
     ax.legend(frameon=False, fontsize=8, title=None)
     ax.spines[["top", "right"]].set_visible(False)
-fig.suptitle("Демографические градиенты LLM (у людей из Table 2 они слабые)")
 fig.tight_layout()
 fig.savefig(FIG / "fig5_gradients.png", dpi=160)
 plt.close(fig)
 
-# ---- Fig 6: расстояние до человека -----------------------------------------------------
 rows = []
 for m in ORDER:
     mm = v[v.model_name == m]
@@ -165,8 +149,4 @@ fig.tight_layout()
 fig.savefig(FIG / "fig6_distance.png", dpi=160)
 plt.close(fig)
 
-print("Сохранено в", FIG)
-for f in sorted(FIG.glob("*.png")):
-    print(" -", f.name)
-print("\nСводка для подписей:")
 print(d.round(3).to_string())

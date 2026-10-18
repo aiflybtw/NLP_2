@@ -1,5 +1,3 @@
-"""Валидация: deepseek с включённым reasoning (max 12000), 4 профиля x3 = 12 запросов."""
-
 import csv
 import sys
 from concurrent.futures import ThreadPoolExecutor

@@ -1,13 +1,3 @@
-"""Сборка запроса messages=[system, user] с рандомизацией порядка списков.
-
-Использование:
-    from build_request import build_messages
-    msgs, list_order = build_messages("P1", perm_index=0)
-
-Порядок списков рандомизируется (6 перестановок), логируется в поле `list_order`.
-См. 01_task_context.md §6.6, 02_llm_profiles.md §7.
-"""
-
 import itertools
 import json
 from pathlib import Path
@@ -36,19 +26,18 @@ PERMUTATIONS = list(itertools.permutations(["today_vs_1m", "today_vs_6m", "6m_vs
 TEMPERATURE = 1.0
 
 
-def load_system(profile_id: str) -> str:
+def load_system(profile_id):
     return (BASE / SYSTEM_FILES[profile_id]).read_text(encoding="utf-8").strip()
 
 
-def build_user(list_order: tuple[str, str, str]) -> str:
+def build_user(list_order):
     list_lines = "\n".join(BLOCKS["lists"][k] for k in list_order)
     return "\n\n".join(
         [BLOCKS["intro"], list_lines, BLOCKS["rows"], BLOCKS["payment"], BLOCKS["anonymity"], BLOCKS["format"]]
     )
 
 
-def build_messages(profile_id: str, perm_index: int):
-    """Возвращает (messages, list_order). perm_index 0..5."""
+def build_messages(profile_id, perm_index):
     list_order = PERMUTATIONS[perm_index % 6]
     messages = [
         {"role": "system", "content": load_system(profile_id)},
@@ -58,7 +47,6 @@ def build_messages(profile_id: str, perm_index: int):
 
 
 if __name__ == "__main__":
-    # Самопроверка: все 9 профилей x 6 перестановок собираются
     for pid in ["P0"] + [f"P{i}" for i in range(1, 9)]:
         for i in range(6):
             msgs, order = build_messages(pid, i)
@@ -66,4 +54,4 @@ if __name__ == "__main__":
             assert set(order) == {"today_vs_1m", "today_vs_6m", "6m_vs_7m"}
             for k in ["today_vs_1m", "today_vs_6m", "6m_vs_7m"]:
                 assert k in msgs[1]["content"]
-    print("OK: 9 profiles x 6 permutations, temperature =", TEMPERATURE)
+    print("OK")
